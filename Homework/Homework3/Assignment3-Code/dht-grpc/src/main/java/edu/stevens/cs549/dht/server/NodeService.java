@@ -58,5 +58,85 @@ public class NodeService extends DhtServiceImplBase {
 		responseObserver.onCompleted();
 	}
 
+	@Override
+	public void getPred(Empty empty, StreamObserver<OptNodeInfo> responseObserver) {
+		Log.weblog(TAG, "getPred()");
+		responseObserver.onNext(getDht().getPred());
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void getSucc(Empty empty, StreamObserver<NodeInfo> responseObserver) {
+		Log.weblog(TAG, "getSucc()");
+		responseObserver.onNext(getDht().getSucc());
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void closestPrecedingFinger(Id Id, StreamObserver<NodeInfo> responseObserver) {
+		Log.weblog(TAG, "closestPrecedingFinger()");
+		responseObserver.onNext(getDht().closestPrecedingFinger(Id.getId()));
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void notify(NodeBindings nodeBindings, StreamObserver<OptNodeBindings> responseObserver) {
+		Log.weblog(TAG, "notify()");
+		responseObserver.onNext(getDht().notify(nodeBindings));
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void getBindings(Key key, StreamObserver<Bindings> responseObserver) {
+		Log.weblog(TAG, "getBindings()");
+		try {
+			Bindings bindings = Bindings.getDefaultInstance();
+			responseObserver.onNext(bindings);
+			responseObserver.onCompleted();
+		} catch (Exception e) {
+
+		}
+	}
+
+	@Override
+	public void addBinding(Binding binding, StreamObserver<Empty> responseObserver) {
+		Log.weblog(TAG, "addBinding()");
+		responseObserver.onNext(Empty.getDefaultInstance());
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void deleteBinding(Binding binding, StreamObserver<Empty> responseObserver) {
+		Log.weblog(TAG, "deleteBinding()");
+		responseObserver.onNext(Empty.getDefaultInstance());
+		responseObserver.onCompleted();
+	}
+
+	@Override
+	public void findSuccessor(Id id, StreamObserver<NodeInfo> responseObserver) {
+		Log.weblog(TAG, "findSuccessor()");
+		try {
+			NodeInfo successor = getDht().findSuccessor(id.getId());
+			responseObserver.onNext(successor);
+			responseObserver.onCompleted();
+		} catch (Exception e) {
+			logger.log(Level.WARNING, e.getMessage(), e);
+		}
+	}
+
+	@Override
+	public void listenOn(Subscription subscription, StreamObserver<Event> responseObserver) {
+		Log.weblog(TAG, "listenOn()");
+		responseObserver.onNext(Event.getDefaultInstance());
+		responseObserver.onCompleted();
+
+	}
+
+	@Override
+	public void listenOff(Subscription subscription, StreamObserver<Empty> responseObserver) {
+		Log.weblog(TAG, "listenOff()");
+		responseObserver.onNext(Empty.getDefaultInstance());
+		responseObserver.onCompleted();
+	}
 
 }
