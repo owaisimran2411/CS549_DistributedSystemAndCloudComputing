@@ -1,5 +1,6 @@
 package edu.stevens.cs549.dht.activity;
 
+import edu.stevens.cs549.dht.events.EventBroadcaster;
 import edu.stevens.cs549.dht.events.IBindingEventListener;
 import edu.stevens.cs549.dht.events.IEventListener;
 import edu.stevens.cs549.dht.events.EventProducer;
@@ -112,8 +113,8 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		if (isEqual(localInfo, info)) {
 			return getSucc();
 		} else {
-			// TODO: Do the Web service call
-			return null;
+			// TODO DONE: Do the Web service call
+			return client.getSucc(info);
 		}
 	}
 
@@ -146,9 +147,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			return getPred();
 		} else {
 			/*
-			 * TODO: Do the Web service call
+			 * TODO DONE: Do the Web service call
 			 */
-			return null;
+			return client.getPred(info);
 		}
 	}
 
@@ -178,9 +179,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		} else {
 			if (IRouting.USE_FINGER_TABLE) {
 				/*
-				 * TODO: Do the Web service call to the remote node.
+				 * TODO DONE: Do the Web service call to the remote node.
 				 */
-				return null;
+				return client.closestPrecedingFinger(info, id);
 			} else {
 				/*
 				 * Without finger tables, just use the successor pointer.
@@ -342,8 +343,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				Log.debug(TAG, "notify: Transferring bindings back to new predecessor with id "+cand.getId());
 				db = transferBindings(cand.getId());
 				/*
-				 * TODO Notify any listeners that the bindings have moved.
+				 * TODO DONE MAYBE: Notify any listeners that the bindings have moved.
 				 */
+				EventBroadcaster.getInstance().broadcastMovedBinding(cand.toString());
 				Log.debug(TAG, "notify: Informing any nodes with listeners for transferred bindings");
 
 			}
@@ -471,9 +473,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			/*
 			 * Retrieve the bindings at the specified node.
 			 * 
-			 * TODO: Do the Web service call.
+			 * TODO DONE: Do the Web service call.
 			 */
-			return null;
+			return client.getBindings(n, k);
 		}
 	}
 
@@ -498,8 +500,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			}
 		} else {
 			/*
-			 * TODO: Do the Web service call.
+			 * TODO DONE: Do the Web service call.
 			 */
+			client.addBinding(n, k, v);
 		}
 	}
 
@@ -521,8 +524,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO Notify any listeners
+			 * TODO DONE MAYBE: Notify any listeners
 			 */
+			EventBroadcaster.getInstance().broadcastNewBinding(k, v);
 
 		} else if (!pred.hasNodeInfo() && isEqual(info, getSucc())) {
 			/*
@@ -530,8 +534,10 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO Notify any listeners
+			 * TODO DONE MAYBE: Notify any listeners
 			 */
+			EventBroadcaster.getInstance().broadcastNewBinding(k, v);
+
 
 		} else if (info.getId() == kid) {
 			/*
@@ -539,8 +545,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO Notify any listeners
+			 * TODO DONE MAYBE: Notify any listeners
 			 */
+			EventBroadcaster.getInstance().broadcastNewBinding(k, v);
 
 		} else if (!pred.hasNodeInfo() && !isEqual(info, getSucc())) {
 			severe("Add: predecessor is null but not a single-node network.");
@@ -562,8 +569,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			}
 		} else {
 			/*
-			 * TODO: Do the Web service call.
+			 * TODO DONE: Do the Web service call.
 			 */
+			client.deleteBinding(n, k, v);
 
 		}
 	}
@@ -634,7 +642,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		NodeInfo info = getNodeInfo();
 		NodeInfo succ;
 		/*
-		 * TODO: Do a web service call to the node identified by "addr" and find
+		 * TODO DONE MAYBE: Do a web service call to the node identified by "addr" and find
 		 * the successor of info.id, then setSucc(succ). Make sure to clear any
 		 * local bindings first of all, to maintain consistency of the ring. We
 		 * start afresh with the bindings that are transferred from the new
@@ -649,6 +657,15 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		 * that it keeps its own bindings, to which it adds those it transfers
 		 * from us.
 		 */
+		state.clear();
+		try {
+			succ = this.getSucc(info);
+			setSucc(succ);
+			notify();
+		} catch (Exception e) {
+			logger.log(Level.WARNING, e.getMessage(), e);
+		}
+		stabilize();
 
 
 	}
@@ -679,16 +696,19 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				inInterval(id, routing.getPred().getNodeInfo().getId(), getNodeInfo().getId())) {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 1", listenerId, key));
 			/*
-			 * TODO add the event producer as the listener to the state broadcaster
+			 * TODO DONE: add the event producer as the listener to the state broadcaster
 			 * (Events will be pushed to the node requesting these updates).
+			 *
 			 */
+			EventBroadcaster.getInstance().addListener(listenerId, key, eventProducer);
 
 		} else {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 2", listenerId, key));
 			/*
-			 * TODO tell the client that they need to try again.
+			 * TODO DONE MAYBE: tell the client that they need to try again.
 			 * User is trying to register a listener for a binding that has moved.
 			 */
+			logger.log(Level.INFO, "trying to register a listener for a binding that has moved");
 
 		}
 	}
@@ -697,7 +717,8 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 	@Override
 	public void listenOff(int listenerId, String key) {
 		Log.debug(TAG, String.format("listenOff(%d,%s) 1", listenerId, key));
-		// TODO remove event output stream from broadcaster
+		// TODO DONE: remove event output stream from broadcaster
+		EventBroadcaster.getInstance().removeListener(listenerId, key);
 
 	}
 
@@ -757,14 +778,17 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				@Override
 				public void onNewBinding(String key, String value) {
 					Log.debug(TAG, String.format("onNewBinding(%s,%s)", key, value));
-					// TODO report a new binding added for key to value
+					// TODO DONE: report a new binding added for key to value
+					EventBroadcaster.getInstance().broadcastNewBinding(key, value);
+
 
 				}
 
 				@Override
 				public void onMovedBinding(String key) {
 					Log.debug(TAG, String.format("onMovedBinding(%s)", key));
-					// TODO transfer listen notifier from previous node to new node
+					// TODO DONE: transfer listen notifier from previous node to new node
+					EventBroadcaster.getInstance().broadcastMovedBinding(key);
 
 				}
 
@@ -788,13 +812,19 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 
 	public void stopListening(String key) throws DhtBase.Failed {
 		/*
-		 * TODO: Stop listening for new binding events for this key.  Need to
+		 * TODO DONE: Stop listening for new binding events for this key.  Need to
 		 * do a Web service call to the server node, to stop event generation.
 		 *
 		 * Although the server will still send us onComplete(), we remove the
 		 * local record of the listener, otherwise it would get confused with
 		 * the new record if a new listener is added (e.g. after moving listener).
 		 */
+		int id = NodeKey(key);
+		NodeInfo target = findSuccessor(id);
+		NodeInfo myInfo = getNodeInfo();
+		Subscription subscription = Subscription.newBuilder().setId(myInfo.getId()).setKey(key).build();
+		state.stopListening(key);
+		client.listenOff(target, subscription);
 
 	}
 

@@ -61,7 +61,7 @@ public class WebClient {
 
 
 	/*
-	 * TODO: Fill in missing operations.
+	 * TODO DONE MAYBE: Fill in missing operations.
 	 */
 
 	/*
@@ -85,8 +85,14 @@ public class WebClient {
 	 */
 	public OptNodeBindings notify(NodeInfo node, NodeBindings predDb) throws DhtBase.Failed {
 		Log.weblog(TAG, "notify("+node.getId()+")");
-		// TODO
-		throw new IllegalStateException("notify() not yet implemented");
+		// TODO DONE MAYBE
+		try {
+			return getStub(node).notify(predDb);
+		} catch (Exception e) {
+			logger.log(Level.WARNING, e.getMessage(), e);
+		}
+		return null;
+//		throw new IllegalStateException("notify() not yet implemented");
 		/*
 		 * The protocol here is more complex than for other operations. We
 		 * notify a new successor that we are its predecessor, and expect its
@@ -121,14 +127,14 @@ public class WebClient {
 	 */
 	public void listenOn(NodeInfo node, Subscription subscription, IEventListener listener) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOn("+node.getId()+")");
-		// TODO listen for updates for the key specified in the subscription
+		// TODO DONE MAYBE: listen for updates for the key specified in the subscription
 		getStub(node).listenOn(subscription);
 
 	}
 
 	public void listenOff(NodeInfo node, Subscription subscription) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOff("+node.getId()+")");
-		// TODO stop listening for updates on bindings to the key in the subscription
+		// TODO DONE MAYBE: stop listening for updates on bindings to the key in the subscription
 		getStub(node).listenOff(subscription);
 	}
 	
