@@ -225,24 +225,30 @@ public class State implements IState, IRouting {
 
 	public synchronized void setFinger(int i, NodeInfo info) {
 		/*
-		 * TODO: Set the ith finger.
+		 * TODO DONE: Set the ith finger.
 		 */
+		finger[i] = info;
 	}
 
 	public synchronized NodeInfo getFinger(int i) {
 		/*
-		 * TODO: Get the ith finger.
+		 * TODO DONE: Get the ith finger.
 		 */
-		return null;
+		return finger[i];
 	}
 
 	public synchronized NodeInfo closestPrecedingFinger(int id) {
 		/*
-		 * TODO: Get closest preceding finger for id, to continue search at that
+		 * TODO DONE: Get closest preceding finger for id, to continue search at that
 		 * node. Hint: See DHTBase.inInterval()
 		 */
-
-		return null;
+		NodeInfo returnObject = null;
+		for(int i=NFINGERS -1;i>=0; i--) {
+			if(DhtBase.inInterval(finger[i].getId(), info.getId(), id, false)) {
+				returnObject = finger[i];
+			}
+		}
+		return returnObject;
 	}
 
 	public synchronized void routes() {
