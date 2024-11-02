@@ -2,23 +2,15 @@ package edu.stevens.cs549.dht.main;
 
 import com.google.protobuf.Empty;
 import edu.stevens.cs549.dht.activity.DhtBase;
-import edu.stevens.cs549.dht.events.EventConsumer;
 import edu.stevens.cs549.dht.events.IEventListener;
-import edu.stevens.cs549.dht.rpc.Binding;
-import edu.stevens.cs549.dht.rpc.Bindings;
-import edu.stevens.cs549.dht.rpc.DhtServiceGrpc;
+import edu.stevens.cs549.dht.rpc.*;
 import edu.stevens.cs549.dht.rpc.DhtServiceGrpc.DhtServiceBlockingStub;
 import edu.stevens.cs549.dht.rpc.DhtServiceGrpc.DhtServiceStub;
-import edu.stevens.cs549.dht.rpc.Id;
-import edu.stevens.cs549.dht.rpc.Key;
-import edu.stevens.cs549.dht.rpc.NodeBindings;
-import edu.stevens.cs549.dht.rpc.NodeInfo;
-import edu.stevens.cs549.dht.rpc.OptNodeBindings;
-import edu.stevens.cs549.dht.rpc.OptNodeInfo;
-import edu.stevens.cs549.dht.rpc.Subscription;
 import edu.stevens.cs549.dht.state.IChannels;
 import edu.stevens.cs549.dht.state.IState;
 import io.grpc.Channel;
+
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,6 +71,14 @@ public class WebClient {
 		Log.weblog(TAG, "getPred("+node.getId()+")");
 		return getStub(node).getPred(Empty.getDefaultInstance());
 	}
+	public NodeInfo getSucc(NodeInfo node) throws DhtBase.Failed {
+		Log.weblog(TAG, "getSucc("+node.getId()+")");
+		return getStub(node).getSucc(Empty.getDefaultInstance());
+	}
+	public NodeInfo closestPrecedingFinger(NodeInfo info, int id) throws DhtBase.Failed {
+		Id protoId = Id.newBuilder().setId(id).build();
+		return getStub(info).closestPrecedingFinger(protoId);
+	}
 
 	/*
 	 * Notify node that we (think we) are its predecessor.
@@ -98,18 +98,38 @@ public class WebClient {
 		 */
 	}
 
+	public String[] getBindings(NodeInfo n, String k) throws DhtBase.Failed {
+
+		return getStub(n).getBindings(Key.newBuilder().setKey(k).build()).getValueList().toArray(new String[0]);
+	}
+
+	public void addBinding(NodeInfo n, String k, String v) throws DhtBase.Failed {
+		getStub(n).addBinding(Binding.newBuilder().setKey(k).setValue(v).build());
+	}
+
+	public void deleteBinding(NodeInfo n, String k, String v) throws DhtBase.Failed {
+		getStub(n).deleteBinding(Binding.newBuilder().setKey(k).setValue(v).build());
+	}
+
+	public NodeInfo findSuccessor(String host, int port, int id) throws DhtBase.Failed {
+		DhtServiceGrpc.DhtServiceBlockingStub remoteStub = getStub(host, port);
+		return remoteStub.findSuccessor(Id.newBuilder().setId(id).build());
+	}
+
 	/*
 	 * Listening for new bindings.
 	 */
 	public void listenOn(NodeInfo node, Subscription subscription, IEventListener listener) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOn("+node.getId()+")");
 		// TODO listen for updates for the key specified in the subscription
+		getStub(node).listenOn(subscription);
 
 	}
 
 	public void listenOff(NodeInfo node, Subscription subscription) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOff("+node.getId()+")");
 		// TODO stop listening for updates on bindings to the key in the subscription
+		getStub(node).listenOff(subscription);
 	}
 	
 }

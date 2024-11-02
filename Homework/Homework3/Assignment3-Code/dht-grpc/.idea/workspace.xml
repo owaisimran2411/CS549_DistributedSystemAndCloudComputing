@@ -6,6 +6,8 @@
   <component name="ChangeListManager">
     <list default="true" id="9572edf5-37c5-4d5d-9e4f-55b6b403dd1b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/stevens/cs549/dht/activity/Dht.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/stevens/cs549/dht/activity/Dht.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/edu/stevens/cs549/dht/main/WebClient.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/edu/stevens/cs549/dht/main/WebClient.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -13,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../../.." />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -24,26 +26,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Maven.dht-grpc [clean].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.dht-grpc [cleanc].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.dht-grpc [insta].executor&quot;: &quot;Run&quot;,
-    &quot;Maven.dht-grpc [install].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;D:/Stevens/CS549_DistributedSystemAndCloudComputing/Homework/Homework3/Assignment3-Code/Assignment3-Code/dht-grpc/pom.xml&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Maven.dht-grpc [clean,install].executor": "Run",
+    "Maven.dht-grpc [clean].executor": "Run",
+    "Maven.dht-grpc [cleanc].executor": "Run",
+    "Maven.dht-grpc [insta].executor": "Run",
+    "Maven.dht-grpc [install].executor": "Run",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/Stevens/CS549_DistributedSystemAndCloudComputing/Homework/Homework3/Assignment3-Code/dht-grpc/pom.xml",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="mvn cleanc" />
       <command value="mvn clean" />
       <command value="mvn insta" />
       <command value="mvn install" />
+      <command value="mvn clean install" />
     </option>
   </component>
   <component name="RunManager">
@@ -78,6 +86,7 @@
       <workItem from="1730571898185" duration="40000" />
       <workItem from="1730574980481" duration="146000" />
       <workItem from="1730575142191" duration="46000" />
+      <workItem from="1730575272668" duration="1471000" />
     </task>
     <servers />
   </component>
