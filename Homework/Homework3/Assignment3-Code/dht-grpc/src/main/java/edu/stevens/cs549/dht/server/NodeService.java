@@ -100,7 +100,16 @@ public class NodeService extends DhtServiceImplBase {
 
 	@Override
 	public void addBinding(Binding binding, StreamObserver<Empty> responseObserver) {
+
 		Log.weblog(TAG, "addBinding()");
+		String key = binding.getKey();
+		String value = binding.getValue();
+
+		try {
+			getDht().add(key, value);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
 		responseObserver.onNext(Empty.getDefaultInstance());
 		responseObserver.onCompleted();
 	}

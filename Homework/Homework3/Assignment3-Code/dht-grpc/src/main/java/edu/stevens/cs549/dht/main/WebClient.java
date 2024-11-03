@@ -86,12 +86,6 @@ public class WebClient {
 	public OptNodeBindings notify(NodeInfo node, NodeBindings predDb) throws DhtBase.Failed {
 		Log.weblog(TAG, "notify("+node.getId()+")");
 		// TODO DONE MAYBE
-		try {
-			return getStub(node).notify(predDb);
-		} catch (Exception e) {
-			logger.log(Level.WARNING, e.getMessage(), e);
-		}
-		return null;
 //		throw new IllegalStateException("notify() not yet implemented");
 		/*
 		 * The protocol here is more complex than for other operations. We
@@ -102,6 +96,13 @@ public class WebClient {
 		 * avoid because to do so is infeasible), it notifies us by returning
 		 * null. This is represented in HTTP by RC=304 (Not Modified).
 		 */
+		try {
+			OptNodeBindings bindings = getStub(node).notify(predDb);
+			return bindings;
+		} catch (Exception e) {
+			logger.log(Level.WARNING, e.getMessage(), e);
+		}
+		return null;
 	}
 
 	public String[] getBindings(NodeInfo n, String k) throws DhtBase.Failed {
