@@ -64,7 +64,7 @@ public class WebClient {
 
 
 	/*
-	 * TODO DONE MAYBE: Fill in missing operations.
+	 * TODOO DONE MAYBE: Fill in missing operations.
 	 */
 
 	/*
@@ -88,7 +88,7 @@ public class WebClient {
 	 */
 	public OptNodeBindings notify(NodeInfo node, NodeBindings predDb) throws DhtBase.Failed {
 		Log.weblog(TAG, "notify("+node.getId()+")");
-		// TODO DONE MAYBE
+		// TODOO DONE MAYBE
 //		throw new IllegalStateException("notify() not yet implemented");
 		/*
 		 * The protocol here is more complex than for other operations. We
@@ -130,16 +130,15 @@ public class WebClient {
 	 */
 	public void listenOn(NodeInfo node, Subscription subscription, IEventListener listener) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOn("+node.getId()+")");
-		// TODO: listen for updates for the key specified in the subscription
-
-		getListenerStub(node).listenOn(subscription, EventConsumer.create(subscription.getKey(), listener));
+		// TODO listen for updates for the key specified in the subscription
+//		getListenerStub(node).listenOn(subscription, EventConsumer.create(subscription.getKey(), listener));
 
 	}
 
 	public void listenOff(NodeInfo node, Subscription subscription) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOff("+node.getId()+")");
-		// TODO: stop listening for updates on bindings to the key in the subscription
-		getStub(node).listenOff(subscription);
+		// TODO stop listening for updates on bindings to the key in the subscription
+//		getStub(node).listenOff(subscription);
 	}
 	
 }

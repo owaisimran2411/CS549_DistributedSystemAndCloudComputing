@@ -152,7 +152,7 @@ public class NodeService extends DhtServiceImplBase {
 		try {
 			getDht().listenOn(subscription.getId(), subscription.getKey(), EventProducer.create(responseObserver));
 			responseObserver.onNext(Event.getDefaultInstance());
-//			responseObserver.onCompleted();
+			responseObserver.onCompleted();
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
