@@ -118,8 +118,7 @@ public class WebClient {
 	}
 
 	public NodeInfo findSuccessor(String host, int port, int id) throws DhtBase.Failed {
-		DhtServiceGrpc.DhtServiceBlockingStub remoteStub = getStub(host, port);
-		return remoteStub.findSuccessor(Id.newBuilder().setId(id).build());
+		return getStub(host, port).findSuccessor(Id.newBuilder().setId(id).build());
 	}
 
 	/*

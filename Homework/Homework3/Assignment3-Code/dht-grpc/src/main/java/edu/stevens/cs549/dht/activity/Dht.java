@@ -475,6 +475,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 * 
 			 * TODO DONE: Do the Web service call.
 			 */
+			logger.log(Level.INFO, "Inside ELSE Block, making a Web Service Call - Get binding");
 			return client.getBindings(n, k);
 		}
 	}
@@ -502,6 +503,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			/*
 			 * TODO DONE: Do the Web service call.
 			 */
+			logger.log(Level.INFO, "Inside ELSE Block, making a Web Service Call - Add binding");
 			client.addBinding(n, k, v);
 		}
 	}
@@ -571,6 +573,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			/*
 			 * TODO DONE: Do the Web service call.
 			 */
+			logger.log(Level.INFO, "Inside ELSE Block, making a Web Service Call - Delete binding");
 			client.deleteBinding(n, k, v);
 
 		}
@@ -659,13 +662,14 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		 */
 		state.clear();
 		try {
-			succ = this.getSucc(info);
+			succ = client.findSuccessor(host, port, info.getId());
 			setSucc(succ);
-			notify();
+			stabilize();
+
 		} catch (Exception e) {
 			logger.log(Level.WARNING, e.getMessage(), e);
 		}
-		stabilize();
+
 
 
 	}
