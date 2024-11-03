@@ -106,7 +106,7 @@ public class WebClient {
 
 	public String[] getBindings(NodeInfo n, String k) throws DhtBase.Failed {
 
-		return getStub(n).getBindings(Key.newBuilder().setKey(k).build()).getValueList().toArray(new String[0]);
+		return getStub(n).getBindings(Key.newBuilder().setKey(k).build()).getValueList().toArray(String[]::new);
 	}
 
 	public void addBinding(NodeInfo n, String k, String v) throws DhtBase.Failed {
