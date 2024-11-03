@@ -149,16 +149,26 @@ public class NodeService extends DhtServiceImplBase {
 	@Override
 	public void listenOn(Subscription subscription, StreamObserver<Event> responseObserver) {
 		Log.weblog(TAG, "listenOn()");
-		responseObserver.onNext(Event.getDefaultInstance());
-		responseObserver.onCompleted();
-
+		try {
+			getDht().listenOn(subscription.getId(), subscription.getKey(), EventProducer.create(responseObserver));
+			responseObserver.onNext(Event.getDefaultInstance());
+//			responseObserver.onCompleted();
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
 	}
 
 	@Override
 	public void listenOff(Subscription subscription, StreamObserver<Empty> responseObserver) {
 		Log.weblog(TAG, "listenOff()");
-		responseObserver.onNext(Empty.getDefaultInstance());
-		responseObserver.onCompleted();
+		try {
+			getDht().listenOff(subscription.getId(), subscription.getKey());
+			responseObserver.onNext(Empty.getDefaultInstance());
+			responseObserver.onCompleted();
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+
 	}
 
 }

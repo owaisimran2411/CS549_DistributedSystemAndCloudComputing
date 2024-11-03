@@ -704,7 +704,8 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 * (Events will be pushed to the node requesting these updates).
 			 *
 			 */
-			EventBroadcaster.getInstance().addListener(listenerId, key, eventProducer);
+			state.getBroadcaster().addListener(listenerId, key, eventProducer);
+//			EventBroadcaster.getInstance().addListener(listenerId, key, eventProducer);
 
 		} else {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 2", listenerId, key));

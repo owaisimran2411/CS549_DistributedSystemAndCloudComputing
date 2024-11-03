@@ -2,6 +2,8 @@ package edu.stevens.cs549.dht.main;
 
 import com.google.protobuf.Empty;
 import edu.stevens.cs549.dht.activity.DhtBase;
+import edu.stevens.cs549.dht.events.EventConsumer;
+import edu.stevens.cs549.dht.events.EventProducer;
 import edu.stevens.cs549.dht.events.IEventListener;
 import edu.stevens.cs549.dht.rpc.*;
 import edu.stevens.cs549.dht.rpc.DhtServiceGrpc.DhtServiceBlockingStub;
@@ -9,6 +11,7 @@ import edu.stevens.cs549.dht.rpc.DhtServiceGrpc.DhtServiceStub;
 import edu.stevens.cs549.dht.state.IChannels;
 import edu.stevens.cs549.dht.state.IState;
 import io.grpc.Channel;
+import io.grpc.stub.StreamObserver;
 
 import java.util.Iterator;
 import java.util.logging.Level;
@@ -128,7 +131,8 @@ public class WebClient {
 	public void listenOn(NodeInfo node, Subscription subscription, IEventListener listener) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOn("+node.getId()+")");
 		// TODO DONE MAYBE: listen for updates for the key specified in the subscription
-		getStub(node).listenOn(subscription);
+
+		getListenerStub(node).listenOn(subscription, EventConsumer.create(subscription.getKey(), listener));
 
 	}
 
