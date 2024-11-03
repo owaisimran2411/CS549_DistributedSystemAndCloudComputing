@@ -343,7 +343,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				Log.debug(TAG, "notify: Transferring bindings back to new predecessor with id "+cand.getId());
 				db = transferBindings(cand.getId());
 				/*
-				 * TODO DONE MAYBE: Notify any listeners that the bindings have moved.
+				 * TODO: Notify any listeners that the bindings have moved.
 				 */
 				EventBroadcaster.getInstance().broadcastMovedBinding(cand.toString());
 				Log.debug(TAG, "notify: Informing any nodes with listeners for transferred bindings");
