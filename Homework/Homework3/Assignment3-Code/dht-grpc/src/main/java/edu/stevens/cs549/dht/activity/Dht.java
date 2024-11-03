@@ -704,7 +704,8 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 * (Events will be pushed to the node requesting these updates).
 			 *
 			 */
-//			state.getBroadcaster().addListener(id, key, eventProducer);
+			state.getBroadcaster().addListener(id, key, eventProducer);
+			logger.log(Level.INFO, "I am in the Listenon function in DHT.java");
 //			EventBroadcaster.getInstance().addListener(listenerId, key, eventProducer);
 
 		} else {
@@ -713,7 +714,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 * TODO tell the client that they need to try again.
 			 * User is trying to register a listener for a binding that has moved.
 			 */
-//			logger.log(Level.INFO, "trying to register a listener for a binding that has moved");
+			logger.log(Level.INFO, "trying to register a listener for a binding that has moved");
 
 		}
 	}
@@ -723,7 +724,8 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 	public void listenOff(int listenerId, String key) {
 		Log.debug(TAG, String.format("listenOff(%d,%s) 1", listenerId, key));
 		// TODO remove event output stream from broadcaster
-//		EventBroadcaster.getInstance().removeListener(listenerId, key);
+		int id = NodeKey(key);
+		state.getBroadcaster().removeListener(id, key);
 
 	}
 
@@ -829,7 +831,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 //		NodeInfo target = findSuccessor(id);
 //		NodeInfo myInfo = getNodeInfo();
 //		Subscription subscription = Subscription.newBuilder().setId(myInfo.getId()).setKey(key).build();
-//		state.stopListening(key);
+		state.stopListening(key);
 //		client.listenOff(target, subscription);
 
 	}

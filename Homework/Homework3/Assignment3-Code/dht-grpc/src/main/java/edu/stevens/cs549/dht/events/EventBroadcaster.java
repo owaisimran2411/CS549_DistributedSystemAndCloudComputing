@@ -38,6 +38,8 @@ public class EventBroadcaster implements IEventBroadcaster {
         }
         keyListeners.remove(id);
         listener.onClosed(key);
+        Log.debug(TAG, keyListeners.toString());
+        Log.debug(TAG, listener.toString());
     }
 
     @Override
