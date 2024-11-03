@@ -12,6 +12,8 @@ import edu.stevens.cs549.dht.rpc.*;
 import edu.stevens.cs549.dht.rpc.DhtServiceGrpc.DhtServiceImplBase;
 import edu.stevens.cs549.dht.rpc.NodeInfo;
 import io.grpc.stub.StreamObserver;
+
+import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -89,8 +91,9 @@ public class NodeService extends DhtServiceImplBase {
 	@Override
 	public void getBindings(Key key, StreamObserver<Bindings> responseObserver) {
 		Log.weblog(TAG, "getBindings()");
+		String k = key.getKey();
 		try {
-			Bindings bindings = Bindings.getDefaultInstance();
+			Bindings bindings = Bindings.newBuilder().setKey(k).addAllValue(List.of(getDht().get(k))).build();
 			responseObserver.onNext(bindings);
 			responseObserver.onCompleted();
 		} catch (Exception e) {
@@ -107,18 +110,28 @@ public class NodeService extends DhtServiceImplBase {
 
 		try {
 			getDht().add(key, value);
+			responseObserver.onNext(Empty.getDefaultInstance());
+			responseObserver.onCompleted();
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, e.getMessage(), e);
 		}
-		responseObserver.onNext(Empty.getDefaultInstance());
-		responseObserver.onCompleted();
+
 	}
 
 	@Override
 	public void deleteBinding(Binding binding, StreamObserver<Empty> responseObserver) {
 		Log.weblog(TAG, "deleteBinding()");
-		responseObserver.onNext(Empty.getDefaultInstance());
-		responseObserver.onCompleted();
+		String key = binding.getKey();
+		String value = binding.getValue();
+
+		try {
+			getDht().delete(key, value);
+			responseObserver.onNext(Empty.getDefaultInstance());
+			responseObserver.onCompleted();
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, e.getMessage(), e);
+		}
+
 	}
 
 	@Override
