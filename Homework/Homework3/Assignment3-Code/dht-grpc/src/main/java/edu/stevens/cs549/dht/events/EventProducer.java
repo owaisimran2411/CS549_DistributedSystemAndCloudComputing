@@ -24,7 +24,7 @@ public class EventProducer implements IEventListener {
 
     @Override
     public void onNewBinding(String key, String value) {
-        // TODO DONE MAYBE: emit new binding event to listening client.
+        // TODO: emit new binding event to listening client.
         Binding binding = Binding.newBuilder().setKey(key).setValue(value).build();
         observer.onNext(Event.newBuilder().setNewBinding(binding).build());
 
@@ -32,7 +32,7 @@ public class EventProducer implements IEventListener {
 
     @Override
     public void onMovedBinding(String key) {
-        // TODO DONE MAYBE: emit moved binding event to listening client.
+        // TODO: emit moved binding event to listening client.
         observer.onNext(Event.newBuilder().build());
 
     }

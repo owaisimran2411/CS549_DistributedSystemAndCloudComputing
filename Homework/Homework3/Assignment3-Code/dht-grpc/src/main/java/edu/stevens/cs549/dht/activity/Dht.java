@@ -526,7 +526,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO DONE MAYBE: Notify any listeners
+			 * TODO: Notify any listeners
 			 */
 			EventBroadcaster.getInstance().broadcastNewBinding(k, v);
 
@@ -536,7 +536,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO DONE MAYBE: Notify any listeners
+			 * TODO: Notify any listeners
 			 */
 			EventBroadcaster.getInstance().broadcastNewBinding(k, v);
 
@@ -547,7 +547,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO DONE MAYBE: Notify any listeners
+			 * TODO: Notify any listeners
 			 */
 			EventBroadcaster.getInstance().broadcastNewBinding(k, v);
 
@@ -645,7 +645,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		NodeInfo info = getNodeInfo();
 		NodeInfo succ;
 		/*
-		 * TODO DONE MAYBE: Do a web service call to the node identified by "addr" and find
+		 * TODO: Do a web service call to the node identified by "addr" and find
 		 * the successor of info.id, then setSucc(succ). Make sure to clear any
 		 * local bindings first of all, to maintain consistency of the ring. We
 		 * start afresh with the bindings that are transferred from the new
@@ -700,7 +700,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				inInterval(id, routing.getPred().getNodeInfo().getId(), getNodeInfo().getId())) {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 1", listenerId, key));
 			/*
-			 * TODO DONE: add the event producer as the listener to the state broadcaster
+			 * TODO: add the event producer as the listener to the state broadcaster
 			 * (Events will be pushed to the node requesting these updates).
 			 *
 			 */
@@ -710,7 +710,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		} else {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 2", listenerId, key));
 			/*
-			 * TODO DONE MAYBE: tell the client that they need to try again.
+			 * TODO: tell the client that they need to try again.
 			 * User is trying to register a listener for a binding that has moved.
 			 */
 			logger.log(Level.INFO, "trying to register a listener for a binding that has moved");
@@ -722,7 +722,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 	@Override
 	public void listenOff(int listenerId, String key) {
 		Log.debug(TAG, String.format("listenOff(%d,%s) 1", listenerId, key));
-		// TODO DONE: remove event output stream from broadcaster
+		// TODO: remove event output stream from broadcaster
 		EventBroadcaster.getInstance().removeListener(listenerId, key);
 
 	}
@@ -783,7 +783,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				@Override
 				public void onNewBinding(String key, String value) {
 					Log.debug(TAG, String.format("onNewBinding(%s,%s)", key, value));
-					// TODO DONE: report a new binding added for key to value
+					// TODO: report a new binding added for key to value
 					EventBroadcaster.getInstance().broadcastNewBinding(key, value);
 
 
@@ -792,7 +792,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				@Override
 				public void onMovedBinding(String key) {
 					Log.debug(TAG, String.format("onMovedBinding(%s)", key));
-					// TODO DONE: transfer listen notifier from previous node to new node
+					// TODO: transfer listen notifier from previous node to new node
 					EventBroadcaster.getInstance().broadcastMovedBinding(key);
 
 				}
@@ -817,7 +817,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 
 	public void stopListening(String key) throws DhtBase.Failed {
 		/*
-		 * TODO DONE: Stop listening for new binding events for this key.  Need to
+		 * TODO: Stop listening for new binding events for this key.  Need to
 		 * do a Web service call to the server node, to stop event generation.
 		 *
 		 * Although the server will still send us onComplete(), we remove the
