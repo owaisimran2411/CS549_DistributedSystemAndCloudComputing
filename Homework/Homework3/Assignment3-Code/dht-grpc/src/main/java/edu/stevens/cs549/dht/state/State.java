@@ -321,6 +321,7 @@ public class State implements IState, IRouting {
 	@Override
 	public void stopListening(String key) {
 		Log.debug(TAG, "stopListening: Removing record that we are listening on "+key);
+		Log.debug(TAG, String.format("stopListening: bindingMap.get(%s)="+bindingMap.get(key), key));
 		bindingMap.remove(key);
 		Log.debug(TAG, String.format("stopListening: bindingMap.get(%s)="+bindingMap.get(key), key));
 	}

@@ -131,14 +131,14 @@ public class WebClient {
 	public void listenOn(NodeInfo node, Subscription subscription, IEventListener listener) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOn("+node.getId()+")");
 		// TODO listen for updates for the key specified in the subscription
-//		getListenerStub(node).listenOn(subscription, EventConsumer.create(subscription.getKey(), listener));
+		getListenerStub(node).listenOn(subscription, EventConsumer.create(subscription.getKey(), listener));
 
 	}
 
 	public void listenOff(NodeInfo node, Subscription subscription) throws DhtBase.Failed {
 		Log.weblog(TAG, "listenOff("+node.getId()+")");
 		// TODO stop listening for updates on bindings to the key in the subscription
-//		getStub(node).listenOff(subscription);
+		getStub(node).listenOff(subscription);
 	}
 	
 }

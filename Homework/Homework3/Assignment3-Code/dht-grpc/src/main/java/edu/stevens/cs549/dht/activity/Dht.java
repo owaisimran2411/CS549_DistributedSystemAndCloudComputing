@@ -345,7 +345,10 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				/*
 				 * TODO Notify any listeners that the bindings have moved.
 				 */
-//				EventBroadcaster.getInstance().broadcastMovedBinding(cand.toString());
+				for (Bindings var : db.getBindingsList()) {
+					EventBroadcaster.getInstance().broadcastMovedBinding(Bindings.getDefaultInstance().getKey());
+				}
+
 				Log.debug(TAG, "notify: Informing any nodes with listeners for transferred bindings");
 
 			}
@@ -526,9 +529,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO Notify any listeners
+			 * TODO Notify any listeners ----
 			 */
-//			state.getBroadcaster().broadcastNewBinding(k, v);
+			state.getBroadcaster().broadcastNewBinding(k, v);
 
 		} else if (!pred.hasNodeInfo() && isEqual(info, getSucc())) {
 			/*
@@ -536,9 +539,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO Notify any listeners
+			 * TODO Notify any listeners ----
 			 */
-//			state.getBroadcaster().broadcastNewBinding(k, v);
+			state.getBroadcaster().broadcastNewBinding(k, v);
 
 
 		} else if (info.getId() == kid) {
@@ -547,9 +550,9 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 			 */
 			state.add(k, v);
 			/*
-			 * TODO Notify any listeners
+			 * TODO Notify any listeners ----
 			 */
-//			state.getBroadcaster().broadcastNewBinding(k, v);
+			state.getBroadcaster().broadcastNewBinding(k, v);
 
 		} else if (!pred.hasNodeInfo() && !isEqual(info, getSucc())) {
 			severe("Add: predecessor is null but not a single-node network.");
@@ -700,18 +703,17 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				inInterval(id, routing.getPred().getNodeInfo().getId(), getNodeInfo().getId())) {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 1", listenerId, key));
 			/*
-			 * TODO add the event producer as the listener to the state broadcaster
+			 * TODO add the event producer as the listener to the state broadcaster ----
 			 * (Events will be pushed to the node requesting these updates).
 			 *
 			 */
 			state.getBroadcaster().addListener(id, key, eventProducer);
-			logger.log(Level.INFO, "I am in the Listenon function in DHT.java");
 //			EventBroadcaster.getInstance().addListener(listenerId, key, eventProducer);
 
 		} else {
 			Log.debug(TAG, String.format("listenOn(%d,%s) 2", listenerId, key));
 			/*
-			 * TODO tell the client that they need to try again.
+			 * TODO tell the client that they need to try again. ----
 			 * User is trying to register a listener for a binding that has moved.
 			 */
 			logger.log(Level.INFO, "trying to register a listener for a binding that has moved");
@@ -723,7 +725,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 	@Override
 	public void listenOff(int listenerId, String key) {
 		Log.debug(TAG, String.format("listenOff(%d,%s) 1", listenerId, key));
-		// TODO remove event output stream from broadcaster
+		// TODO remove event output stream from broadcaster ----
 		int id = NodeKey(key);
 		state.getBroadcaster().removeListener(id, key);
 
@@ -785,8 +787,8 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				@Override
 				public void onNewBinding(String key, String value) {
 					Log.debug(TAG, String.format("onNewBinding(%s,%s)", key, value));
-					// TODO report a new binding added for key to value
-//					EventBroadcaster.getInstance().broadcastNewBinding(key, value);
+					// TODO report a new binding added for key to value ----
+					EventBroadcaster.getInstance().broadcastNewBinding(key, value);
 
 
 				}
@@ -795,7 +797,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 				public void onMovedBinding(String key) {
 					Log.debug(TAG, String.format("onMovedBinding(%s)", key));
 					// TODO transfer listen notifier from previous node to new node
-//					transferListener(key, bindingEventListener);
+					transferListener(key, bindingEventListener);
 
 
 				}
@@ -820,7 +822,7 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 
 	public void stopListening(String key) throws DhtBase.Failed {
 		/*
-		 * TODO Stop listening for new binding events for this key.  Need to
+		 * TODO Stop listening for new binding events for this key.  Need to ----
 		 * do a Web service call to the server node, to stop event generation.
 		 *
 		 * Although the server will still send us onComplete(), we remove the
@@ -829,10 +831,10 @@ public class Dht extends DhtBase implements IDhtService, IDhtNode, IDhtBackgroun
 		 */
 //		int id = NodeKey(key);
 //		NodeInfo target = findSuccessor(id);
-//		NodeInfo myInfo = getNodeInfo();
-//		Subscription subscription = Subscription.newBuilder().setId(myInfo.getId()).setKey(key).build();
+		NodeInfo myInfo = getNodeInfo();
+		Subscription subscription = Subscription.newBuilder().setId(myInfo.getId()).setKey(key).build();
 		state.stopListening(key);
-//		client.listenOff(target, subscription);
+		client.listenOff(myInfo, subscription);
 
 	}
 
